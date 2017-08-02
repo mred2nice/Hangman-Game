@@ -1,0 +1,27 @@
+body 
+	{
+  		background-image: url("../images/Background3.jpg");
+  		background-image: 100%;
+  		height:100%;
+   		width:100%;
+   		background-repeat:no-repeat; 
+   		background-size:cover;
+   	}
+		
+textarea
+	{
+		border:solid;
+		resize:none;
+		overflow:hidden;
+		text-align:center;
+		font-size:14px;
+		font-weight:bold;
+		visibility: visible;
+		
+	}
+
+#clickMe {
+	font-family:"Comic Sans MS", cursive, sans-serif;
+	radi
+
+}

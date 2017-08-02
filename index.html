@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact | Your Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <style>
+		
+  </style>
+ </head>
+
+<body> 
+	<form>
+	<
+	<div class="TextBoxcontainer">
+	<br>
+	<br>
+		<div id="word">
+				
+		</div>
+	</div>
+	<br>
+	<br>
+	<input id="clickMe" type="button" value="New Game" onclick="NewGame();" />
+	</form>
+	
+	<script type="text/javascript">
+		//Variable to compare if at least one game played so I know I have randomly created textareas 
+		//to delete.
+		var UsedAtLeastOnce = false;
+		var previousWord;
+		var arrayWordCheck = [20];
+		var randomWord = "";
+		var guessedLetters = 0;
+		var randomWordLength = 0;
+
+		//Array of words to randomly select from
+		/*var arrayWords = ["Football","Baseball","Bowling","Soccer","Basketball","Hockey","Volleyball",
+					  	  "Poodle","Pug","Corgi","Chihauhau","Mastiff","Pitbull","Greyhound","Akita",
+					  	  "Boxer","Bulldog","Dalmation","Maltese","Newfoundland","Rottweiler"];*/
+		var arrayWords = ["football","baseball","bowling","soccer","basketball","hockey","volleyball",
+					  	  "poodle","pug","corgi","chihauhau","mastiff","pitbull","greyhound","akita",
+					  	  "boxer","bulldog","dalmation","maltese","newfoundland","rottweiler"];
+		
+		function NewGame() {
+			//Check if NewGame button has been clicked at least once so I know I have textareas to 
+			//remove
+			if (UsedAtLeastOnce) {
+				//If at least one game played, then have to remove textareas before displaying new word
+          		for(var i=0;i<previousWord.length;i++){
+					var c = previousWord.charAt(i);
+					var name = "TA" + i;
+					var element = document.createElement("textarea");
+					var child = document.getElementById(name);
+          			var parent = document.getElementById("word");
+          			parent.removeChild(child);
+				}
+			}
+
+			//Random selected word
+			//var randomWord = arrayWords[Math.floor(Math.random() * arrayWords.length)];
+			randomWord = arrayWords[Math.floor(Math.random() * arrayWords.length)];
+			previousWord = randomWord;
+			//Length of randomly selected word
+			randomWordLength = randomWord.length;
+			//Loop through the word character by character:
+			//	1)Create textarea for each character
+			//  2)Put character in text area
+			//  3)Set textarea so user cannot see the letters
+			for(var i=0;i<randomWordLength;i++){
+				var c = randomWord.charAt(i);
+				var name = "TA" + i;
+				var element = document.createElement("textarea");
+				element.setAttribute("cols", "1");
+				element.setAttribute("rows", "1");
+				element.setAttribute("type", "text");
+				element.setAttribute("name", name);
+				element.setAttribute("id", name);
+				element.setAttribute("value",c);
+				var word = document.getElementById("word");
+				word.appendChild(element);
+				document.getElementById(name).value = c;
+				document.getElementById(name).style.color = "white"
+				document.getElementById(name).style.borderColor = "black"
+				document.getElementById(name).style.readonly = "readonly"
+				arrayWordCheck.push(c);		
+			}
+			UsedAtLeastOnce = true;
+		}
+
+		//Detect keyup event from User
+		document.onkeyup = function(event) {
+			//Validate for letter only
+			if((event.keyCode >= 65 && event.keyCode <= 90)||(event.keycode >= 97 && event.keycode <= 122)){
+				if (arrayWordCheck.indexOf(event.key) != -1) {
+					//Is a letter so need to display the textarea
+					var indices = [];
+					for(var i=0; i<randomWord.length;i++) {
+						var charCheck = randomWord[i];
+    					if (charCheck == event.key) {
+    						document.getElementById("TA" + i).style.color = "black";
+    						guessedLetters++;
+    					}
+    				}	
+					//Check if all letters in word guessed
+					if (guessedLetters === randomWordLength) {
+						alert("You WON!!!");
+					}
+				} else {
+					alert(event.key + " is not in the word.")
+				}
+			} else {
+  				alert("key pressed is not a letter. Please try again.")
+			}
+        }
+	</script>
+</body>
+
+</html>
