@@ -15,13 +15,13 @@
 	<!--<form>-->
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-1 text-left">
+			<div class="col-sm-1">
 			<h3 id="wordCategory">Dogs</h3>
 			<h3 id="wordCategory">or</h3>
 			<br>
 			<h3 id="wordCategory">Sports</h3>
 			</div>
-			<div class="col-lg-4 text-left">
+			<div class="col-lg-5">
 				<div class="TextBoxcontainer">
 					<div id="word">
 				
@@ -35,31 +35,11 @@
 				<h3>Number of Wins: <span id="numOfWins"> </span></h3>
 				<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>
 			</div>
-			<div class="col-lg-7">
+			<div class="col-lg-6">
 				
 			</div>
 		</div>
 	</div>
-
-	<!--<div class="TextBoxcontainer">
-		<div id="word">
-				
-		</div>
-	</div>
-
-	<br>
-	<br>
-	<input id="clickMe" type="button" value="New Game" onclick="NewGame();">
-	<br>
-	<br>
-	<br>
-	<br>
-	<h3>Guesses Left: <span id="numOfGuessesLeft"> </span></h3>
-	<br>
-	<h3>Number of Wins: <span id="numOfWins"> </span></h3>
-	<br>
-	<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>-->
-	<!--</form>-->
 	
 	<script type="text/javascript">
 		var UsedAtLeastOnce = false;
@@ -83,12 +63,11 @@
 					  	  "poodle","pug","corgi","chihauhau","mastiff","pitbull","greyhound","akita",
 					  	  "boxer","bulldog","dalmation","maltese","newfoundland","rottweiler"];
 		function NewGame() {  
-			//Check if NewGame button has been clicked at least once so I know I have textareas to 
-			//remove
 			if (UsedAtLeastOnce) {
-				//*************************************************************************************
-				//If at least one game played, then have to remove textareas before displaying new word
-				//*************************************************************************************
+				//************************************************
+				//If at least one game played, then have to remove
+				// textareas before displaying new word
+				//************************************************
           		for(var i=0;i<previousWord.length;i++){
 					var c = previousWord.charAt(i);
 					var name = "TA" + i;
@@ -137,6 +116,9 @@
 		//****************************
 		//Detect keyup event from User
 		//****************************
+		document.onmousedown = function(event) {
+			event.preventDefault();
+		}
 		document.onkeyup = function(event) {
 			//************************
 			//Validate for letter only
@@ -178,17 +160,24 @@
 					//1)reduce number of guesses left
 					//2)add letter to list of those previously guessed that 
 					//  are not in the word
+					//3)need to check if already guessed is so do not put in
+					//  list and do not reduce guess counter
 					//******************************************************
-					numOfGuessesLeft--;
-					numOfGuessesLeftVar.textContent = numOfGuessesLeft;
 					if (lettersNotInWordsVar.textContent == "") {
 						lettersNotInWords = event.key;
 						lettersNotInWordsVar.textContent = lettersNotInWords;
+						numOfGuessesLeft--;
+						numOfGuessesLeftVar.textContent = numOfGuessesLeft;
 					} else {
-						lettersNotInWords = lettersNotInWords + "," + event.key;
-						lettersNotInWordsVar.textContent = lettersNotInWords;
+						var str = lettersNotInWords
+						var n = str.indexOf(event.key);
+						if (n == -1) {
+							numOfGuessesLeft--;
+							numOfGuessesLeftVar.textContent = numOfGuessesLeft;
+							lettersNotInWords = lettersNotInWords + "," + event.key;
+							lettersNotInWordsVar.textContent = lettersNotInWords;
+						}
 					}
-					alert(event.key + " is not in the word.")
 				}
 			} else {
   				alert("key pressed is not a letter. Please try again.");
