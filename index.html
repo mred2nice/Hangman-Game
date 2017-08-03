@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Contact | Your Name</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   <style>
 		
@@ -11,15 +12,41 @@
  </head>
 
 <body> 
-	<form>
-	<
-	<div class="TextBoxcontainer">
-	<br>
-	<br>
+	<!--<form>-->
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-1 text-left">
+			<h3 id="wordCategory">Dogs</h3>
+			<h3 id="wordCategory">or</h3>
+			<br>
+			<h3 id="wordCategory">Sports</h3>
+			</div>
+			<div class="col-lg-4 text-left">
+				<div class="TextBoxcontainer">
+					<div id="word">
+				
+					</div>
+				</div>
+				<br>
+				<br>
+				<input id="clickMe" type="button" value="New Game" onclick="NewGame();">
+				<br>
+				<h3>Guesses Left: <span id="numOfGuessesLeft"> </span></h3>
+				<h3>Number of Wins: <span id="numOfWins"> </span></h3>
+				<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>
+			</div>
+			<div class="col-lg-7">
+				
+			</div>
+		</div>
+	</div>
+
+	<!--<div class="TextBoxcontainer">
 		<div id="word">
 				
 		</div>
 	</div>
+
 	<br>
 	<br>
 	<input id="clickMe" type="button" value="New Game" onclick="NewGame();">
@@ -31,12 +58,10 @@
 	<br>
 	<h3>Number of Wins: <span id="numOfWins"> </span></h3>
 	<br>
-	<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>
-	</form>
+	<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>-->
+	<!--</form>-->
 	
 	<script type="text/javascript">
-		//Variable to compare if at least one game played so I know I have randomly created textareas 
-		//to delete.
 		var UsedAtLeastOnce = false;
 		var previousWord;
 		var arrayWordCheck = [20];
@@ -51,7 +76,9 @@
 		var lettersNotInWordsVar = document.getElementById("lettersNotInWords");
 		lettersNotInWordsVar.textContent = lettersNotInWords;
 
+		//**************************************
 		//Array of words to randomly select from
+		//**************************************
 		var arrayWords = ["football","baseball","bowling","soccer","basketball","hockey","volleyball",
 					  	  "poodle","pug","corgi","chihauhau","mastiff","pitbull","greyhound","akita",
 					  	  "boxer","bulldog","dalmation","maltese","newfoundland","rottweiler"];
@@ -59,7 +86,9 @@
 			//Check if NewGame button has been clicked at least once so I know I have textareas to 
 			//remove
 			if (UsedAtLeastOnce) {
+				//*************************************************************************************
 				//If at least one game played, then have to remove textareas before displaying new word
+				//*************************************************************************************
           		for(var i=0;i<previousWord.length;i++){
 					var c = previousWord.charAt(i);
 					var name = "TA" + i;
@@ -69,15 +98,21 @@
           			parent.removeChild(child);
 				}
 			}
+			//********************
 			//Random selected word
+			//********************
 			randomWord = arrayWords[Math.floor(Math.random() * arrayWords.length)];
 			previousWord = randomWord;
+			//********************************
 			//Length of randomly selected word
+			//********************************
 			randomWordLength = randomWord.length;
+			//***********************************************
 			//Loop through the word character by character:
 			//	1)Create textarea for each character
 			//  2)Put character in text area
 			//  3)Set textarea so user cannot see the letters
+			//***********************************************
 			for(var i=0;i<randomWordLength;i++){
 				var c = randomWord.charAt(i);
 				var name = "TA" + i;
@@ -160,6 +195,7 @@
 			}
         }
 	</script>
+
 </body>
 
 </html>
