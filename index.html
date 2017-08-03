@@ -22,7 +22,16 @@
 	</div>
 	<br>
 	<br>
-	<input id="clickMe" type="button" value="New Game" onclick="NewGame();" />
+	<input id="clickMe" type="button" value="New Game" onclick="NewGame();">
+	<br>
+	<br>
+	<br>
+	<br>
+	<h3>Guesses Left: <span id="numOfGuessesLeft"> </span></h3>
+	<br>
+	<h3>Number of Wins: <span id="numOfWins"> </span></h3>
+	<br>
+	<h3>Letters Guessed Not In Word: <span id="lettersNotInWords"> </span></h3>
 	</form>
 	
 	<script type="text/javascript">
@@ -34,16 +43,19 @@
 		var randomWord = "";
 		var guessedLetters = 0;
 		var randomWordLength = 0;
+		var numOfWins = 0;
+		var numOfGuessesLeft = 13;
+		var numOfGuessesLeftVar = document.getElementById("numOfGuessesLeft");
+		numOfGuessesLeftVar.textContent = numOfGuessesLeft;
+		var lettersNotInWords = ""; 
+		var lettersNotInWordsVar = document.getElementById("lettersNotInWords");
+		lettersNotInWordsVar.textContent = lettersNotInWords;
 
 		//Array of words to randomly select from
-		/*var arrayWords = ["Football","Baseball","Bowling","Soccer","Basketball","Hockey","Volleyball",
-					  	  "Poodle","Pug","Corgi","Chihauhau","Mastiff","Pitbull","Greyhound","Akita",
-					  	  "Boxer","Bulldog","Dalmation","Maltese","Newfoundland","Rottweiler"];*/
 		var arrayWords = ["football","baseball","bowling","soccer","basketball","hockey","volleyball",
 					  	  "poodle","pug","corgi","chihauhau","mastiff","pitbull","greyhound","akita",
 					  	  "boxer","bulldog","dalmation","maltese","newfoundland","rottweiler"];
-		
-		function NewGame() {
+		function NewGame() {  
 			//Check if NewGame button has been clicked at least once so I know I have textareas to 
 			//remove
 			if (UsedAtLeastOnce) {
@@ -57,9 +69,7 @@
           			parent.removeChild(child);
 				}
 			}
-
 			//Random selected word
-			//var randomWord = arrayWords[Math.floor(Math.random() * arrayWords.length)];
 			randomWord = arrayWords[Math.floor(Math.random() * arrayWords.length)];
 			previousWord = randomWord;
 			//Length of randomly selected word
@@ -79,22 +89,29 @@
 				element.setAttribute("id", name);
 				element.setAttribute("value",c);
 				var word = document.getElementById("word");
-				word.appendChild(element);
+				word.appendChild(element); 
 				document.getElementById(name).value = c;
-				document.getElementById(name).style.color = "white"
-				document.getElementById(name).style.borderColor = "black"
-				document.getElementById(name).style.readonly = "readonly"
+				document.getElementById(name).style.color = "white";
+				document.getElementById(name).style.borderColor = "black";
+				document.getElementById(name).style.readonly = "readonly";
+				document.getElementById(name).style.onmousedown="return false";
 				arrayWordCheck.push(c);		
 			}
 			UsedAtLeastOnce = true;
 		}
-
+		//****************************
 		//Detect keyup event from User
+		//****************************
 		document.onkeyup = function(event) {
+			//************************
 			//Validate for letter only
+			//************************
 			if((event.keyCode >= 65 && event.keyCode <= 90)||(event.keycode >= 97 && event.keycode <= 122)){
+				numOfGuessesLeftVar.textContent = numOfGuessesLeft;
+				//************************************************************
+				//If a letter in word, then display the letter in the textarea
+				//************************************************************
 				if (arrayWordCheck.indexOf(event.key) != -1) {
-					//Is a letter so need to display the textarea
 					var indices = [];
 					for(var i=0; i<randomWord.length;i++) {
 						var charCheck = randomWord[i];
@@ -102,16 +119,44 @@
     						document.getElementById("TA" + i).style.color = "black";
     						guessedLetters++;
     					}
-    				}	
-					//Check if all letters in word guessed
+    				}
+    				//************************************************	
+					//Check if all letters in word guessed, if so:
+					//1)increment numOfWins
+					//2)reset numOfGuessesLeft back to 13 for new game
+					//3)reset guessedLetters back to 0 for new game
+					//4)remove list of guessed letters not in the word
+					//************************************************
 					if (guessedLetters === randomWordLength) {
-						alert("You WON!!!");
+						numOfWins++;
+						var numOfWinsVar = document.getElementById("numOfWins");
+						numOfWinsVar.textContent = numOfWins;
+						numOfGuessesLeft = 13;
+						numOfGuessesLeftVar.textContent = numOfGuessesLeft;
+						guessedLetters = 0;
+						lettersNotInWords = "";
+						lettersNotInWordsVar.textContent = lettersNotInWords;
 					}
 				} else {
+					//******************************************************
+					//Key pressed is a valid key(letter) but not in the word
+					//1)reduce number of guesses left
+					//2)add letter to list of those previously guessed that 
+					//  are not in the word
+					//******************************************************
+					numOfGuessesLeft--;
+					numOfGuessesLeftVar.textContent = numOfGuessesLeft;
+					if (lettersNotInWordsVar.textContent == "") {
+						lettersNotInWords = event.key;
+						lettersNotInWordsVar.textContent = lettersNotInWords;
+					} else {
+						lettersNotInWords = lettersNotInWords + "," + event.key;
+						lettersNotInWordsVar.textContent = lettersNotInWords;
+					}
 					alert(event.key + " is not in the word.")
 				}
 			} else {
-  				alert("key pressed is not a letter. Please try again.")
+  				alert("key pressed is not a letter. Please try again.");
 			}
         }
 	</script>
